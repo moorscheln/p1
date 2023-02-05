@@ -1,9 +1,9 @@
-template <typename Elmtype>
+template <typename elmtype>
 class CircularDynamicArray
 {
 private:
-    Elmtype *array;
-    int size, cap;
+    elmtype *array;
+    int size, cap, front, back;
 
 public:
     // Constructors
@@ -11,13 +11,17 @@ public:
     {
         size = 0;
         cap = 2;
-        array = new Elmtype[cap];
+        array = new elmtype[cap];
+        front = 0;
+        // back = 0;
     }
     CircularDynamicArray(int s)
     {
         size = s;
         cap = 2 * s;
-        array = new Elmtype[cap];
+        array = new elmtype[cap];
+        front = 0;
+        // back = 0;
     }
 
     // Destructor
@@ -27,7 +31,7 @@ public:
     }
 
     // Operators
-    Elmtype &operator[](int i)
+    elmtype &operator[](int i)
     {
         if (i < 0 || i >= size)
         {
@@ -37,68 +41,60 @@ public:
     }
 
     // Add elements
-    void addEnd(Elmtype v)
+    void addEnd(elmtype endElement)
     {
         if (size == cap)
         {
-            cap *= 2;
-            Elmtype *new_array = new Elmtype[cap];
-            for (int i = 0; i < size; i++)
-            {
-                new_array[i] = array[i];
-            }
-            delete[] array;
-            array = new_array;
+            resize(cap * 2);
         }
-        array[size++] = v;
-    }
-    void addFront(Elmtype v)
-    {
-        if (size == cap)
-        {
-            cap *= 2;
-            Elmtype *new_array = new Elmtype[cap];
-            for (int i = 0; i < size; i++)
-            {
-                new_array[i + 1] = array[i];
-            }
-            delete[] array;
-            array = new_array;
-        }
+        array[(front + size) % cap] = endElement;
         size++;
-        for (int i = size - 1; i > 0; i--)
+    }
+    //     cap *= 2;
+    //     elmtype *new_array = new elmtype[cap];
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         new_array[i] = array[i];
+    //     }
+    //     delete[] array;
+    //     array = new_array;
+    // }
+    // array[size++] = v;
+    void addFront(elmtype frontElement)
+    {
+        if (size == cap)
         {
-            array[i] = array[i - 1];
+            resize(cap * 2);
         }
-        array[0] = v;
+
+        front = (front - 1 + cap) % cap;
+        array[front] = frontElement;
+        size++;
     }
 
     // Delete elements
     void delEnd()
     {
-        size--;
-        if (size < cap / 4)
+        if (size > 0)
         {
-            cap /= 2;
-            Elmtype *new_array = new Elmtype[cap];
-            for (int i = 0; i < size; i++)
+            size--;
+            if (size <= cap / 4)
             {
-                new_array[i] = array[i];
+                resize(cap / 2);
             }
-            delete[] array;
-            array = new_array;
         }
     }
     void delFront()
     {
-        if (size == 0)
-            return;
-
-        array[0] = (array[0] + 1) % cap;
-        size--;
-
-        if (size == 0)
-            array[0] = array[size] = -1;
+        if (size > 0)
+        {
+            front = (front + 1) % cap;
+            size--;
+            if (size <= cap / 4)
+            {
+                resize(cap / 2);
+            }
+        }
     }
 
     // Getters
@@ -111,30 +107,47 @@ public:
         return cap;
     }
 
+    elmtype get(int i)
+    {
+        return array[(front + index) % cap];
+    }
+
     // Utility functions
     void clear()
     {
         size = 0;
         cap = 2;
         delete[] array;
-        array = new Elmtype[cap];
+        array = new elmtype[cap];
     }
-    Elmtype QuickSelect(int k)
+    elmtype QuickSelect(int k)
     {
     }
-    Elmtype WCSelect(int k)
+    elmtype WCSelect(int k)
     {
     }
     void stableSort()
     {
     }
-    int linearSearch(Elmtype e)
+    int linearSearch(elmtype e)
     {
     }
-    int binSearch(Elmtype e)
+    int binSearch(elmtype e)
     {
     }
     void reverse()
     {
+    }
+    void resize(int newCapacity)
+    {
+        elmtype *newArray = new elmtype[newCapacity];
+        for (int i = 0; i < size; i++)
+        {
+            newArray[i] = array[(front + i) % cap];
+        }
+        delete[] array;
+        array = newArray;
+        front = 0;
+        cap = newCapacity;
     }
 };
