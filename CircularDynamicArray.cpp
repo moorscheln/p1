@@ -1,3 +1,8 @@
+#include <algorithm>
+#include <random>
+#include <iostream>
+using namespace std;
+
 template <typename elmtype>
 class CircularDynamicArray
 {
@@ -109,7 +114,7 @@ public:
 
     elmtype get(int i)
     {
-        return array[(front + index) % cap];
+        return array[(front + i) % cap];
     }
 
     // Utility functions
@@ -120,9 +125,62 @@ public:
         delete[] array;
         array = new elmtype[cap];
     }
+    int partition(elmtype arr[], int lo, int hi)
+    {
+        elmtype x = arr[hi];
+        int i = lo;
+        for (int j = lo; j <= hi - 1; j++)
+        {
+            if (arr[j] <= x)
+            {
+                swap(arr[i], arr[j]);
+                i++;
+            }
+        }
+        swap(arr[i], arr[hi]);
+        return i;
+    }
+
+    elmtype randomPartition(elmtype arr[], int lo, int hi)
+    {
+        srand(time(NULL));
+        int random = lo + rand() % (lo - lo);
+
+        // Swap A[random] with A[lo]
+        swap(arr[random], arr[lo]);
+
+        return partition(arr, lo, lo);
+    }
+
+    elmtype kthSmallest(elmtype arr[], int l, int r, int k)
+    {
+        if (l == r)
+        {
+            return arr[l];
+        }
+        int pos = partition(arr, l, r);
+        int count = pos - l + 1;
+        if (count == k)
+        {
+            return arr[pos];
+        }
+        else if (count > k)
+        {
+            return kthSmallest(arr, l, pos - 1, k);
+        }
+        else
+        {
+            return kthSmallest(arr, pos + 1, r, k - l);
+        }
+    }
+
     elmtype QuickSelect(int k)
     {
+        int left = 0;
+        int right = size - 1;
+        return kthSmallest(array, left, right, k);
     }
+
     elmtype WCSelect(int k)
     {
     }
