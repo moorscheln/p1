@@ -9,6 +9,43 @@ class CircularDynamicArray
 private:
     elmtype *array;
     int size, cap, front, back;
+    int cdaIndex(int index)
+    {
+        return ((front + index) % cap);
+    }
+    void sizeIncrease()
+    {
+        cap = cap * 2;
+        elmtype *increasedArray = new elmtype[cap];
+
+        for (int i = 0; i < cap; i++)
+        {
+            increasedArray[i] = array[cdaIndex(i)]
+        }
+
+        delete[] array;
+
+        array = increasedArray;
+        front = 0;
+    }
+    void sizeReduce()
+    {
+        if (size <= 0)
+        {
+            return;
+        }
+        cap = cap / 2;
+        elmtype *reducedArray = new elmtype[cap];
+
+        for (int i = 0; i < cap; i++)
+        {
+            reducedArray[i] = array[cdaIndex(i)]
+        }
+        delete[] array;
+
+        array = reducedArray;
+        front = 0;
+    }
 
 public:
     // Constructors
@@ -16,16 +53,18 @@ public:
     {
         size = 0;
         cap = 2;
-        array = new elmtype[cap];
         front = 0;
+        array = new elmtype[cap];
+
         // back = 0;
     }
     CircularDynamicArray(int s)
     {
         size = s;
         cap = 2 * s;
-        array = new elmtype[cap];
         front = 0;
+        array = new elmtype[cap];
+
         // back = 0;
     }
 
@@ -45,6 +84,18 @@ public:
         // leftChild = newNode->leftChild;
         // rightChild = newNode->rightChild;
         // data = newNode->data;
+
+        elmtype
+
+            size = parDynArray.size;
+        cap = parDynArray.cap;
+        front = 0;
+        array = new elmtype[cap];
+
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = parDynArray[i];
+        }
 
         return *this;
     };
@@ -127,11 +178,12 @@ public:
     {
         if (size > 0)
         {
+            elmtype temp = array[front];
             front = (front + 1) % cap;
             size--;
-            if (size <= cap / 4)
+            if ((((double)size) / ((double)cap)) <= .25)
             {
-                resize(cap / 2);
+                sizeReduce();
             }
         }
     }
