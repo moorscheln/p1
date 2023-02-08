@@ -29,6 +29,40 @@ public:
         // back = 0;
     }
 
+    CircularDynamicArray &operator=(const CircularDynamicArray &parDynArray) // Assign
+    {
+        // Node *newNode = new Node();
+        // newNode->parent = parNode.parent;
+        // newNode->leftChild = parNode.leftChild;
+        // newNode->rightChild = parNode.rightChild;
+        // newNode->data = parNode.data;
+
+        // delete parent;
+        // delete leftChild;
+        // delete rightChild;
+
+        // parent = newNode->parent;
+        // leftChild = newNode->leftChild;
+        // rightChild = newNode->rightChild;
+        // data = newNode->data;
+
+        return *this;
+    };
+    CircularDynamicArray(const CircularDynamicArray &copyDyArray) // Copy
+        {
+            // parent = copyNode.parent;
+            // leftChild = copyNode.leftChild;
+            // rightChild = copyNode.rightChild;
+            // data = copyNode.data;
+        };
+
+    // Copy constructor
+    // this.array = int[otherArray.size()]
+    // for(int i = 0; i < otherArray.size(); i++) {
+    //     this.array = otherArray[i];
+    // }
+    // Assignment operator
+
     // Destructor
     ~CircularDynamicArray()
     {
@@ -144,9 +178,9 @@ public:
     elmtype randomPartition(elmtype arr[], int lo, int hi)
     {
         srand(time(NULL));
-        int random = lo + rand() % (lo - lo);
+        int random = lo + rand() % (hi - lo);
 
-        // Swap A[random] with A[lo]
+        // Swap arr[random] with A[lo]
         swap(arr[random], arr[lo]);
 
         return partition(arr, lo, lo);
