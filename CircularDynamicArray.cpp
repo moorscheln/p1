@@ -226,8 +226,7 @@ public:
         if (relativeIndex < 0 || relativeIndex >= size)
         {
             cout << "Error: Index out of bounds." << endl;
-            return this->error;
-        }
+                }
         else
         {
             return array[(front + relativeIndex + cap) % cap];
