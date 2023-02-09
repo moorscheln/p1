@@ -121,18 +121,13 @@ void Mytest()
     std::cout << std::endl;
     std::cout << std::endl;
     std::cout << "Add End -> 0" << std::endl;
-    C.addEnd(0);
-    std::cout << "Expected: " << std::endl
+    std::cout << "Expected: "
               << "10 5 4 8 9 2 1 3 6 7 0" << std::endl;
 
-    std::cout << "Got: " << std::endl;
-    for (int i = 0; i < C.length(); i++)
-        std::cout << C[i] << " ";
-    std::cout << std::endl;
-    for (int i = 0; i < C.length(); i++)
+    for (int i = 1; i <= C.length(); i++)
     {
-        std::cout << "Expected "
-                  << " Got " << C.QuickSelect(i) << std::endl;
+
+        std::cout << "Expected " << i << " Got " << C.QuickSelect(i) << std::endl;
         std::cout << " UserIndex = " << i << " Our Index = " << C.indexFront(i) << std::endl;
     }
 }

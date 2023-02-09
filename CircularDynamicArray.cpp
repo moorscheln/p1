@@ -25,9 +25,7 @@ private:
         cap = cap * 2;
         elmtype *increasedArray = new elmtype[cap];
 
-        int
-
-            for (int i = 0; i < cap; i++)
+        for (int i = 0; i < cap; i++)
         {
             increasedArray[indexFront(i)] = array[indexFront(i)];
         }
@@ -153,7 +151,7 @@ public:
         this->size = s;
         this->cap = 2 * s;
         this->front = 0;
-        this->back = s - 1;
+        this->back = s;
         this->array = new elmtype[cap];
         this->isReversed = false;
         // this->error = 0;
@@ -247,7 +245,7 @@ public:
             sizeIncrease();
             // resize(cap * 2);
         }
-        array[indexBack(size)] = endElement;
+        array[(front + size) % cap] = endElement;
         size++;
     }
     //     cap *= 2;
@@ -262,9 +260,6 @@ public:
     // array[size++] = v;
     void addFront(elmtype frontElement)
     {
-        // front > 0
-        // front == 0 and size ==0
-        // front == 0 and size == 0
         if (size == cap)
         {
             sizeIncrease();
