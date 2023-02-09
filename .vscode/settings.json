@@ -1,6 +1,34 @@
 {
     "files.associations": {
+        "*.cpp": "cpp",
         "__tuple": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "random": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "__bit_reference": "cpp",
+        "__mutex_base": "cpp",
+        "string": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp",
+        "chrono": "cpp",
+        "__node_handle": "cpp",
+        "atomic": "cpp",
+        "cstddef": "cpp",
+        "__memory": "cpp",
+        "limits": "cpp",
+        "locale": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp"
     }
 }

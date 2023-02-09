@@ -1,18 +1,23 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <vector>
 using namespace std;
 
-template <typename elmtype>
+template <class elmtype>
 class CircularDynamicArray
 {
 private:
     elmtype *array;
-    elmtype error;
+    // elmtype error;
     int size, cap, front, back;
-    int cdaIndex(int index)
+    int indexFront(int index)
     {
-        return ((front + index) % cap);
+        return ((front + index + cap) % cap);
+    }
+    int indexBack(int index)
+    {
+        return ((front + index + cap) % cap);
     }
     void sizeIncrease()
     {
@@ -21,7 +26,7 @@ private:
 
         for (int i = 0; i < cap; i++)
         {
-            increasedArray[i] = array[cdaIndex(i)];
+            increasedArray[indexFront(i)] = array[indexFront(i)];
         }
 
         delete[] array;
@@ -40,13 +45,92 @@ private:
 
         for (int i = 0; i < cap; i++)
         {
-            reducedArray[i] = array[cdaIndex(i)];
+            reducedArray[indexFront(i)] = array[indexFront(i)];
         }
         delete[] array;
 
         array = reducedArray;
-        front = 0;
+        front = indexFront(0);
     }
+    void DeepCopy(const CircularDynamicArray<elmtype> &obj)
+    {
+        size = obj.size;
+        cap = obj.size;
+        front = obj.front;
+        back = obj.back;
+        // error = obj.error;
+        array = new elmtype[cap];
+        for (int i = 0; i < obj.size; i++)
+        {
+            array[(front + i + cap) % cap] = obj.array[(front + i + cap) % cap];
+        }
+    }
+    int partition(elmtype arr[], int lo, int hi)
+    {
+        elmtype x = arr[hi];
+        int i = lo;
+        for (int j = lo; j <= hi - 1; j++)
+        {
+            if (arr[j] <= x)
+            {
+                swap(arr[i], arr[j]);
+                i++;
+            }
+        }
+        swap(arr[i], arr[hi]);
+        return i;
+    }
+
+    elmtype randomPartition(elmtype arr[], int lo, int hi)
+    {
+        srand(time(NULL));
+        int random = lo + rand() % (hi - lo);
+
+        // Swap arr[random] with A[lo]
+        swap(arr[random], arr[lo]);
+
+        return partition(arr, lo, lo);
+    }
+
+    elmtype kthSmallest(elmtype arr[], int l, int r, int k)
+    {
+        if (l == r)
+        {
+            return arr[l];
+        }
+        int pos = partition(arr, l, r);
+        int count = pos - l + 1;
+        if (count == k)
+        {
+            return arr[pos];
+        }
+        else if (count > k)
+        {
+            return kthSmallest(arr, l, pos - 1, k);
+        }
+        else
+        {
+            return kthSmallest(arr, pos + 1, r, k - l);
+        }
+    }
+
+    void Stable()
+    {
+        std::vector<elmtype> vec(array, array + size);
+        std::stable_sort(vec.begin(), vec.end());
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = vec[i];
+        }
+    }
+    // void setAt(int index, elmtype value)
+    // {
+    //     if (index < 0 || index >= size)
+    //     {
+    //         throw(out_of_range(new elmtype));
+    //     }
+    //     array[index] = value;
+    // }
 
 public:
     // Constructors
@@ -57,7 +141,7 @@ public:
         this->front = 0;
         this->back = 0;
         this->array = new elmtype[cap];
-        this->error = 0;
+        // this->error = 0;
     }
     CircularDynamicArray(int s)
     {
@@ -66,7 +150,7 @@ public:
         this->front = 0;
         this->back = s;
         this->array = new elmtype[cap];
-        this->error = 0;
+        // this->error = 0;
     }
 
     // Destructor
@@ -78,17 +162,17 @@ public:
     // empty pointer when outside the index (error)
 
     // Copy constructor
-    CircularDynamicArray(const CircularDynamicArray &old)
+    CircularDynamicArray(const CircularDynamicArray<elmtype> &old)
     {
-        this->size = old.size;
-        this->cap = old.size;
-        this->front = old.front;
-        this->back = old.back;
-        this->error = old.error;
-        this->array = new elmtype[cap];
+        size = old.size;
+        cap = old.size;
+        front = old.front;
+        back = old.back;
+        // error = old.error;
+        array = new elmtype[cap];
         for (int i = 0; i < old.size; i++)
         {
-            this->array[(front + i + cap) % cap] = old.array[(front + i + cap) % cap];
+            array[(front + i + cap) % cap] = old.array[(front + i + cap) % cap];
         }
     };
 
@@ -99,32 +183,23 @@ public:
 
     // Operators
     // Assignment operator
-    CircularDynamicArray &operator=(const CircularDynamicArray &original) // Assign
+    CircularDynamicArray<elmtype> &operator=(const CircularDynamicArray<elmtype> &original) // Assign
     {
         if (this != &original)
         {
             delete[] array;
-            this->size = original.size;
-            this->cap = original.size;
-            this->front = original.front;
-            this->back = original.back;
-            this->error = original.error;
-            this->array = new elmtype[cap];
-            for (int i = 0; i < original.size; i++)
-            {
-                this->array[(front + i + cap) % cap] = original.array[(front + i + cap) % cap];
-            }
+            DeepCopy(original);
+            // this->size = original.size;
+            // this->cap = original.size;
+            // this->front = original.front;
+            // this->back = original.back;
+            // this->error = original.error;
+            // this->array = new elmtype[cap];
+            // for (int i = 0; i < original.size; i++)
+            // {
+            //     this->array[(front + i + cap) % cap] = original.array[(front + i + cap) % cap];
+            // }
         }
-
-        // size = old.size;
-        // cap = old.cap;
-        // front = 0;
-        // array = new elmtype[cap];
-
-        // for (int i = 0; i < size; i++)
-        // {
-        //     array[(front + i + cap) % cap] = old.array[(front + i + cap) % cap];
-        // }
 
         return *this;
     };
@@ -133,12 +208,30 @@ public:
     // Bracket Operator
     elmtype &operator[](int relativeIndex)
     {
+        // try(relativeIndex < size || relativeIndex >= 0) {
+        //     return array[(front + relativeIndex + cap) % cap];
+        // }
+        // throw
+        // if (relativeIndex < size || relativeIndex >= 0)
+        // {
+        //     try();
+        //     return array[(front + relativeIndex + cap) % cap];
+        // }
+        // else
+        // {
+
+        // }
+        // array->setAt(relativeIndex, const new elmtype);
+
         if (relativeIndex < 0 || relativeIndex >= size)
         {
             cout << "Error: Index out of bounds." << endl;
             return this->error;
         }
-        return array[(front + relativeIndex + cap) % cap];
+        else
+        {
+            return array[(front + relativeIndex + cap) % cap];
+        }
     }
 
     // Add elements
@@ -225,54 +318,6 @@ public:
         delete[] array;
         array = new elmtype[cap];
     }
-    int partition(elmtype arr[], int lo, int hi)
-    {
-        elmtype x = arr[hi];
-        int i = lo;
-        for (int j = lo; j <= hi - 1; j++)
-        {
-            if (arr[j] <= x)
-            {
-                swap(arr[i], arr[j]);
-                i++;
-            }
-        }
-        swap(arr[i], arr[hi]);
-        return i;
-    }
-
-    elmtype randomPartition(elmtype arr[], int lo, int hi)
-    {
-        srand(time(NULL));
-        int random = lo + rand() % (hi - lo);
-
-        // Swap arr[random] with A[lo]
-        swap(arr[random], arr[lo]);
-
-        return partition(arr, lo, lo);
-    }
-
-    elmtype kthSmallest(elmtype arr[], int l, int r, int k)
-    {
-        if (l == r)
-        {
-            return arr[l];
-        }
-        int pos = partition(arr, l, r);
-        int count = pos - l + 1;
-        if (count == k)
-        {
-            return arr[pos];
-        }
-        else if (count > k)
-        {
-            return kthSmallest(arr, l, pos - 1, k);
-        }
-        else
-        {
-            return kthSmallest(arr, pos + 1, r, k - l);
-        }
-    }
 
     elmtype QuickSelect(int k)
     {
@@ -281,20 +326,57 @@ public:
         return kthSmallest(array, left, right, k);
     }
 
-    elmtype WCSelect(int k)
-    {
-    }
+    // elmtype WCSelect(int k)
+    // {
+    // }
+    // MERGE SORT
     void stableSort()
     {
+        Stable();
     }
     int linearSearch(elmtype e)
     {
+        for (int i = 0; i < size; i++)
+        {
+            if (array[i] == e)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
     int binSearch(elmtype e)
     {
+        int left = 0;
+        int right = size - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (array[mid] == e)
+            {
+                return mid;
+            }
+            else if (array[mid] < e)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+        return -1;
     }
     void reverse()
     {
+        int start = 0;
+        int end = size - 1;
+        while (start < end)
+        {
+            swap(array[start], array[end]);
+            start++;
+            end--;
+        }
     }
     // void resize(int newCapacity)
     // {

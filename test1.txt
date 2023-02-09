@@ -1,0 +1,80 @@
+TEST 1
+
+
+-----------------------GENERATING STRINGS------------------------
+
+5P N 2 qmWq BlQ9w Qj99 nsQ zld V I5Z 
+
+
+-----------------------SORTING------------------------
+
+5P N 2 qmWq BlQ9w Qj99 nsQ zld V I5Z 
+
+
+-----------------------GENERATING STRINGS------------------------
+
+G5n Cd K5RhR 5  GXbE u R W Xd 
+
+
+-----------------------SORTING------------------------
+
+5P N 2 qmWq BlQ9w Qj99 nsQ zld V I5Z 
+
+
+-----------------------TESTING QUICKSELECT------------------------
+
+Expected 8 Got 8
+Expected 6 Got 6
+
+
+-----------------------TESTING ADD REMOVE REVERSE SEARCHES CLEAR------------------------
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+Added Front
+Y Z  A B C D E F G H I J K L M N O P Q R S T U V W X 
+Deleted End
+Z A B C D E F G H I J K L M N O P Q R S T U V W X Y 
+Clearing..
+
+^Above should be empty line, size is: 0 (should be 0), capacity is: 2 (should be 2)
+Threw in some values
+I A D N E X Q Q O U    
+Deleted End
+I D N E X Q Q O U    
+Clearing..
+
+^Above should be empty line, size is: 0 (should be 0), capacity is: 2 (should be 2)
+Threw in some values
+B H T G P D P S C H    
+Deleted Front
+T G P D P S C H    B 
+Deleted End
+G P D P S C H    T 
+Added Front
+S T G P D P S C H    
+Reversed
+S T G P D P S C H    
+Added End
+S H T G P D P S C F    
+Added End
+S H T T G P D P S C F Y   
+Added End
+S H T J T G P D P S C F Y F  
+Sorting..
+In search for V, LinearSearch got: 1, Binsearch got: 1
+S H T J T G P D P S C F Y F  
+
+
+-----------------------TESTING BIG 3------------------------
+
+Original array:
+G5n Cd K5RhR 5  GXbE u R W Xd 
+Copy='d array:
+G5n Cd K5RhR 5  GXbE u R W Xd 
+Copycon'd array:
+G5n Cd K5RhR 5  GXbE u R W Xd 
+Removing half from original. Only original should show changes
+Original: u R W Xd G5n Cd GXbE 
+Copy=: G5n Cd K5RhR 5  GXbE u R W Xd 
+Copycon: G5n Cd K5RhR 5  GXbE u R W Xd 
+Finally, deleting copycon'd array (Should do nothing noticeable but cause no errors)
