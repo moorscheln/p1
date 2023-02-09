@@ -8,6 +8,7 @@ class CircularDynamicArray
 {
 private:
     elmtype *array;
+    elmtype error;
     int size, cap, front, back;
     int cdaIndex(int index)
     {
@@ -20,7 +21,7 @@ private:
 
         for (int i = 0; i < cap; i++)
         {
-            increasedArray[i] = array[cdaIndex(i)]
+            increasedArray[i] = array[cdaIndex(i)];
         }
 
         delete[] array;
@@ -39,7 +40,7 @@ private:
 
         for (int i = 0; i < cap; i++)
         {
-            reducedArray[i] = array[cdaIndex(i)]
+            reducedArray[i] = array[cdaIndex(i)];
         }
         delete[] array;
 
@@ -51,83 +52,93 @@ public:
     // Constructors
     CircularDynamicArray()
     {
-        size = 0;
-        cap = 2;
-        front = 0;
-        array = new elmtype[cap];
-
-        // back = 0;
+        this->size = 0;
+        this->cap = 2;
+        this->front = 0;
+        this->back = 0;
+        this->array = new elmtype[cap];
+        this->error = 0;
     }
     CircularDynamicArray(int s)
     {
-        size = s;
-        cap = 2 * s;
-        front = 0;
-        array = new elmtype[cap];
-
-        // back = 0;
+        this->size = s;
+        this->cap = 2 * s;
+        this->front = 0;
+        this->back = s;
+        this->array = new elmtype[cap];
+        this->error = 0;
     }
-
-    CircularDynamicArray &operator=(const CircularDynamicArray &parDynArray) // Assign
-    {
-        // Node *newNode = new Node();
-        // newNode->parent = parNode.parent;
-        // newNode->leftChild = parNode.leftChild;
-        // newNode->rightChild = parNode.rightChild;
-        // newNode->data = parNode.data;
-
-        // delete parent;
-        // delete leftChild;
-        // delete rightChild;
-
-        // parent = newNode->parent;
-        // leftChild = newNode->leftChild;
-        // rightChild = newNode->rightChild;
-        // data = newNode->data;
-
-        elmtype
-
-            size = parDynArray.size;
-        cap = parDynArray.cap;
-        front = 0;
-        array = new elmtype[cap];
-
-        for (int i = 0; i < size; i++)
-        {
-            array[i] = parDynArray[i];
-        }
-
-        return *this;
-    };
-    CircularDynamicArray(const CircularDynamicArray &copyDyArray) // Copy
-        {
-            // parent = copyNode.parent;
-            // leftChild = copyNode.leftChild;
-            // rightChild = copyNode.rightChild;
-            // data = copyNode.data;
-        };
-
-    // Copy constructor
-    // this.array = int[otherArray.size()]
-    // for(int i = 0; i < otherArray.size(); i++) {
-    //     this.array = otherArray[i];
-    // }
-    // Assignment operator
 
     // Destructor
     ~CircularDynamicArray()
     {
         delete[] array;
     }
+    // (front+i+cap)%cap gives you correct index in array from our perspective while keeping it positive
+    // empty pointer when outside the index (error)
+
+    // Copy constructor
+    CircularDynamicArray(const CircularDynamicArray &old)
+    {
+        this->size = old.size;
+        this->cap = old.size;
+        this->front = old.front;
+        this->back = old.back;
+        this->error = old.error;
+        this->array = new elmtype[cap];
+        for (int i = 0; i < old.size; i++)
+        {
+            this->array[(front + i + cap) % cap] = old.array[(front + i + cap) % cap];
+        }
+    };
+
+    // this.array = int[otherArray.size()]
+    // for(int i = 0; i < otherArray.size(); i++) {
+    //     this.array = otherArray[i];
+    // }
 
     // Operators
-    elmtype &operator[](int i)
+    // Assignment operator
+    CircularDynamicArray &operator=(const CircularDynamicArray &original) // Assign
     {
-        if (i < 0 || i >= size)
+        if (this != &original)
+        {
+            delete[] array;
+            this->size = original.size;
+            this->cap = original.size;
+            this->front = original.front;
+            this->back = original.back;
+            this->error = original.error;
+            this->array = new elmtype[cap];
+            for (int i = 0; i < original.size; i++)
+            {
+                this->array[(front + i + cap) % cap] = original.array[(front + i + cap) % cap];
+            }
+        }
+
+        // size = old.size;
+        // cap = old.cap;
+        // front = 0;
+        // array = new elmtype[cap];
+
+        // for (int i = 0; i < size; i++)
+        // {
+        //     array[(front + i + cap) % cap] = old.array[(front + i + cap) % cap];
+        // }
+
+        return *this;
+    };
+
+    // relativeIndex = index relative to front of array
+    // Bracket Operator
+    elmtype &operator[](int relativeIndex)
+    {
+        if (relativeIndex < 0 || relativeIndex >= size)
         {
             cout << "Error: Index out of bounds." << endl;
+            return this->error;
         }
-        return array[i];
+        return array[(front + relativeIndex + cap) % cap];
     }
 
     // Add elements
@@ -135,7 +146,8 @@ public:
     {
         if (size == cap)
         {
-            resize(cap * 2);
+            sizeIncrease();
+            // resize(cap * 2);
         }
         array[(front + size) % cap] = endElement;
         size++;
@@ -154,7 +166,8 @@ public:
     {
         if (size == cap)
         {
-            resize(cap * 2);
+            sizeIncrease();
+            // resize(cap * 2);
         }
 
         front = (front - 1 + cap) % cap;
@@ -170,7 +183,8 @@ public:
             size--;
             if (size <= cap / 4)
             {
-                resize(cap / 2);
+                // resize(cap / 2);
+                sizeReduce();
             }
         }
     }
@@ -282,16 +296,16 @@ public:
     void reverse()
     {
     }
-    void resize(int newCapacity)
-    {
-        elmtype *newArray = new elmtype[newCapacity];
-        for (int i = 0; i < size; i++)
-        {
-            newArray[i] = array[(front + i) % cap];
-        }
-        delete[] array;
-        array = newArray;
-        front = 0;
-        cap = newCapacity;
-    }
+    // void resize(int newCapacity)
+    // {
+    //     elmtype *newArray = new elmtype[newCapacity];
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         newArray[i] = array[(front + i) % cap];
+    //     }
+    //     delete[] array;
+    //     array = newArray;
+    //     front = 0;
+    //     cap = newCapacity;
+    // }
 };
