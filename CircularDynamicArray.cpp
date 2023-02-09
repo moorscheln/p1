@@ -11,20 +11,23 @@ private:
     elmtype *array;
     // elmtype error;
     int size, cap, front, back;
-    int indexFront(int index)
-    {
-        return ((front + index + cap) % cap);
-    }
-    int indexBack(int index)
-    {
-        return ((front + index + cap) % cap);
-    }
+    bool isReversed;
+    // friend int indexFront(int index)
+    // {
+    //     return ((front + index + cap) % cap);
+    // }
+    // friend int indexBack(int index)
+    // {
+    //     return ((back + index + cap) % cap);
+    // }
     void sizeIncrease()
     {
         cap = cap * 2;
         elmtype *increasedArray = new elmtype[cap];
 
-        for (int i = 0; i < cap; i++)
+        int
+
+            for (int i = 0; i < cap; i++)
         {
             increasedArray[indexFront(i)] = array[indexFront(i)];
         }
@@ -58,6 +61,7 @@ private:
         cap = obj.size;
         front = obj.front;
         back = obj.back;
+        isReversed = obj.isReversed;
         // error = obj.error;
         array = new elmtype[cap];
         for (int i = 0; i < obj.size; i++)
@@ -141,6 +145,7 @@ public:
         this->front = 0;
         this->back = 0;
         this->array = new elmtype[cap];
+        this->isReversed = false;
         // this->error = 0;
     }
     CircularDynamicArray(int s)
@@ -148,8 +153,9 @@ public:
         this->size = s;
         this->cap = 2 * s;
         this->front = 0;
-        this->back = s;
+        this->back = s - 1;
         this->array = new elmtype[cap];
+        this->isReversed = false;
         // this->error = 0;
     }
 
@@ -226,7 +232,7 @@ public:
         if (relativeIndex < 0 || relativeIndex >= size)
         {
             cout << "Error: Index out of bounds." << endl;
-                }
+        }
         else
         {
             return array[(front + relativeIndex + cap) % cap];
@@ -241,7 +247,7 @@ public:
             sizeIncrease();
             // resize(cap * 2);
         }
-        array[(front + size) % cap] = endElement;
+        array[indexBack(size)] = endElement;
         size++;
     }
     //     cap *= 2;
@@ -256,6 +262,9 @@ public:
     // array[size++] = v;
     void addFront(elmtype frontElement)
     {
+        // front > 0
+        // front == 0 and size ==0
+        // front == 0 and size == 0
         if (size == cap)
         {
             sizeIncrease();
@@ -284,13 +293,17 @@ public:
     {
         if (size > 0)
         {
-            elmtype temp = array[front];
+            // elmtype temp = array[front];
             front = (front + 1) % cap;
             size--;
             if ((((double)size) / ((double)cap)) <= .25)
             {
                 sizeReduce();
             }
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -368,6 +381,7 @@ public:
     }
     void reverse()
     {
+
         int start = 0;
         int end = size - 1;
         while (start < end)
@@ -376,6 +390,14 @@ public:
             start++;
             end--;
         }
+    }
+    int indexFront(int index)
+    {
+        return ((front + index + cap) % cap);
+    }
+    int indexBack(int index)
+    {
+        return ((back + index + cap) % cap);
     }
     // void resize(int newCapacity)
     // {
