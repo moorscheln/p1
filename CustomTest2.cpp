@@ -60,21 +60,107 @@ void print(CircularDynamicArray<ArrayType> arr)
     std::cout << std::endl;
 }
 
-void QSUnittest(int size = 100)
+void QSUnittest(int blank = 100)
 {
     CircularDynamicArray<int> CDA;
-    for (int i = 1; i <= size; i++)
+    for (int i = 0; i < 10; i++)
     {
         CDA.addEnd(i);
     }
-    for (int i = 0; i < size / 4; i++)
+    // for (int i = 0; i < size / 4; i++)
+    // {
+    for (int i = 1; i <= CDA.length(); i++)
     {
-        int n = randomInt(1, size);
-        std::cout << "Expected " << n << " Got " << CDA.QuickSelect(n) << std::endl;
+
+        std::cout << "Expected " << i - 1 << " Got " << CDA.QuickSelect(i) << std::endl;
     }
 }
 
-void QSUnsorted(int size = 100)
+void QSSorted(int blank = 100)
+{
+    CircularDynamicArray<float> C(10);
+    C[0] = 10;
+    C[1] = 5;
+    C[2] = 4;
+    C[3] = 8;
+    C[4] = 9;
+    C[5] = 2;
+    C[6] = 1;
+    C[7] = 3;
+    C[8] = 6;
+    C[9] = 7;
+    for (int i = 0; i < C.length(); i++)
+    {
+        std::cout << C[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Head[" << C.head() << "] — "
+              << " Head Element: " << C[C.head()] << std::endl;
+    std::cout << "Tail[" << C.tail() << "] — "
+              << " Tail Element: " << C[C.tail()] << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "AddEnd(0)" << std::endl;
+    C.addEnd(0);
+    for (int i = 0; i < C.length(); i++)
+    {
+        std::cout << C[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Head[" << C.head() << "] — "
+              << " Head Element: " << C[C.head()] << std::endl;
+    std::cout << "Tail[" << C.tail() << "] — "
+              << " Tail Element: " << C[C.tail()] << std::endl;
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "Cap: " << C.capacity() << std::endl;
+    std::cout << "Size: " << C.length() << std::endl;
+    std::cout << "C[0] = " << C[0] << std::endl;
+    std::cout << "C.front = " << C.head() << std::endl;
+    std::cout << "C.back = " << C.tail() << std::endl;
+    std::cout << "addFront(-1)" << std::endl;
+    C.addFront(-1);
+    std::cout << "Cap: " << C.capacity() << std::endl;
+    std::cout << "Size: " << C.length() << std::endl;
+    std::cout << "C[0] = " << C[0] << std::endl;
+    std::cout << "C.head = " << C.head() << std::endl;
+    std::cout << "C.back = " << C.tail() << std::endl;
+    std::cout << std::endl;
+    for (int i = 0; i < C.capacity(); i++)
+    {
+        std::cout << C[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Head[" << C.head() << "] — "
+              << " Head Element: " << C[C.head()] << std::endl;
+    std::cout << "Tail[" << C.tail() << "] — "
+              << " Tail Element: " << C[C.tail()] << std::endl;
+    std::cout << std::endl;
+    for (int i = 0; i < C.length(); i++)
+    {
+        std::cout << "C[" << i << "]: " << C[i] << std::endl;
+    }
+    std::cout << std::endl;
+    C.QuickSelect(1);
+    for (int i = 1; i <= C.length(); i++)
+    {
+        std::cout << "k=" << i << " Expected " << i - 2 << " Got: " << C.QuickSelect(i) << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "Executing StableSort" << std::endl;
+    C.stableSort();
+    std::cout << std::endl;
+    for (int i = 1; i <= C.length(); i++)
+    {
+        std::cout << "k=" << i << " Expected " << i - 2 << " Got: " << C.QuickSelect(i) << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+void QSUnsorted(int blank = 100)
 {
     CircularDynamicArray<float> C(10);
     C[0] = 10;
@@ -93,7 +179,7 @@ void QSUnsorted(int size = 100)
     for (int i = 0; i < C.length(); i++)
         std::cout << C[i] << " ";
     std::cout << std::endl;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < C.length(); i++)
     {
         int n = randomInt(1, 10);
         std::cout << "Expected " << n << " Got " << C.QuickSelect(n) << std::endl;
@@ -128,7 +214,7 @@ void Mytest()
     {
 
         std::cout << "Expected " << i << " Got " << C.QuickSelect(i) << std::endl;
-        std::cout << " UserIndex = " << i << " Our Index = " << C.indexFront(i) << std::endl;
+        std::cout << " UserIndex = " << i << " Our Index = " << C.operatorIndex(i) << std::endl;
     }
 }
 
@@ -271,15 +357,19 @@ int main()
     std::cout << "\n\n-----------------------TESTING QUICKSELECT [disclaimer, this only tests the sorted case, please do your own testing]------------------------\n"
               << std::endl;
     QSUnittest(n);
-    std::cout << "\n\n-----------------------TESTING QUICKSELECT [UNSORTED CASE]]------------------------\n"
-              << std::endl;
-    QSUnsorted(n);
+    // std::cout << "\n\n-----------------------TESTING QUICKSELECT [UNSORTED CASE]]------------------------\n"
+    //           << std::endl;
+    // QSUnsorted(n);
     std::cout << "\n\n-----------------------TESTING ADD REMOVE REVERSE SEARCHES CLEAR------------------------\n"
               << std::endl;
     AddRemoveReverseSearchChar();
     std::cout << "\n\n-----------------------TESTING BIG 3------------------------\n"
               << std::endl;
     Big3Tester(CDA, CDA2);
-
+    std::cout << "\n\n-----------------------TESTING MYTEST------------------------\n"
+              << std::endl;
     Mytest();
+    std::cout << "\n\n-----------------------TESTING QS SORTED------------------------\n"
+              << std::endl;
+    QSSorted();
 }

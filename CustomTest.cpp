@@ -113,9 +113,9 @@ void AddRemoveReverseSearchChar()
         }
         case 5:
         {
-            arr.reverse();
-            std::cout << "Reversed" << std::endl;
-            break;
+            // arr.reverse();
+            // std::cout << "Reversed" << std::endl;
+            // break;
         }
         case 6:
         {
@@ -169,6 +169,7 @@ void Big3Tester(CircularDynamicArray<element> &ar1, CircularDynamicArray<element
 {
     std::cout << "Original array:" << std::endl;
     print(ar1);
+    std::cout << ar1.length() << std::endl;
     std::cout << "Copy='d array:" << std::endl;
     ar2 = ar1;
     print(ar2);
@@ -179,6 +180,7 @@ void Big3Tester(CircularDynamicArray<element> &ar1, CircularDynamicArray<element
     for (int i = 0; i < ar1.length() / 2; i++)
     {
         ar1.delEnd();
+        std::cout << ar1.get(ar1.length()) << std::endl;
     }
     std::cout << "Original: ";
     print(ar1);
@@ -192,28 +194,29 @@ void Big3Tester(CircularDynamicArray<element> &ar1, CircularDynamicArray<element
 
 int main()
 {
+
     int n = 10;
-    std::cout << "\n\n-----------------------GENERATING STRINGS------------------------\n"
-              << std::endl;
+    // std::cout << "\n\n-----------------------GENERATING STRINGS------------------------\n"
+    //           << std::endl;
     CircularDynamicArray<string> CDA2(n);
-    MassiveArrayStarterSizeString(n, CDA2);
-    print(CDA2);
-    std::cout << "\n\n-----------------------STABLE SORTING------------------------\n"
-              << std::endl;
-    CDA2.stableSort();
-    print(CDA2);
+    // MassiveArrayStarterSizeString(n, CDA2);
+    // print(CDA2);
+    // std::cout << "\n\n-----------------------STABLE SORTING------------------------\n"
+    //           << std::endl;
+    // CDA2.stableSort();
+    // print(CDA2);
     std::cout << "\n\n-----------------------GENERATING STRINGS------------------------\n"
               << std::endl;
     CircularDynamicArray<string> CDA;
     MassiveArrayDefaultSizeString(n, CDA);
     print(CDA);
-    std::cout << "\n\n-----------------------STABLE SORTING------------------------\n"
-              << std::endl;
-    CDA2.stableSort();
-    print(CDA2);
-    std::cout << "\n\n-----------------------TESTING QUICKSELECT------------------------\n"
-              << std::endl;
-    QSUnittest(n);
+    // std::cout << "\n\n-----------------------STABLE SORTING------------------------\n"
+    //           << std::endl;
+    // CDA2.stableSort();
+    // print(CDA2);
+    // std::cout << "\n\n-----------------------TESTING QUICKSELECT------------------------\n"
+    //           << std::endl;
+    // QSUnittest(n);
     std::cout << "\n\n-----------------------TESTING ADD REMOVE REVERSE SEARCHES CLEAR------------------------\n"
               << std::endl;
     AddRemoveReverseSearchChar();
